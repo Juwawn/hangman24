@@ -1,3 +1,4 @@
+// Elements by Ids
 const optionsContainer = document.getElementById("options-container");
 const keyboard = document.getElementById("keyboard");
 const answerSection = document.getElementById("answerSection");
@@ -9,9 +10,9 @@ const result = document.getElementById("result");
 
 let options = {
     
-    characters: ["Arya", "Bran", "Brienne", "Bronn", "Catelyn", "Cersei", "Daario", "Daenerys", "Davos", "Ned", "Ellaria", "Gendry", "Gilly", "Jaime","Jeor'Mormont", "Joffrey", "Jon", "Jorah", "Drogo", "Margaery", "Melisandre", "Missandei", "Littlefinger", "Ramsay", "Robb", "Robert", "Sam", "Hound", "Sansa", "Shae", "Stannis", "Talisa", "Theon", "Tommen", "Tormund", "Tyrion", "Tywin", "Viserys Targaryen", "Ygritte"]
+    characters: ["Arya", "Bran", "Brienne", "Bronn", "Catelyn", "Cersei", "Daario", "Daenerys", "Davos", "Ned", "Ellaria", "Gendry", "Gilly", "Jaime","Jeor'Mormont", "Joffrey", "Jon", "Jorah", "Drogo", "Margaery", "Melisandre", "Missandei", "Littlefinger", "Ramsay", "Robb", "Robert", "Sam", "Hound", "Sansa", "Shae", "Stannis", "Talisa", "Theon", "Tommen", "Tormund", "Tyrion", "Tywin", "Viserys", "Ygritte"],
 
-     // quotes: ["Tell them the North remembers. Tell them winter came for House Frey.", "Not today.", "My name is Arya Stark. I want you to know that. The last thing you're ever going to see is a Stark smiling down at you as you die.",  "Leave one wolf alive and the sheep are never safe.", "I know Death. He's got many faces. I look forward to seeing this one.", "I'm not a lady. I never have been. That's not me.", "When you play the game of thrones, you win or you die. There is no middle ground.", "An unhappy wife is a wine merchant's best friend.","What good is power if you cannot protect the ones you love?", "So we fight and die or we submit and die. I know my choice.", "I thought if I could make something so good, so pure, maybe I'm not a monster.", "Power is power.", "If you ever call me sister again I'll have you strangled in your sleep."],
+    houses: ["Lannister", "Baratheon", "Tyrell", "Targaryen", "Karstark", "Glover", "Macklyn", "Tarly", "Martell", "Greyjoy", "Arryn", "Umber", "Mormont", "Royce", "Reed", "Clegane", "Frey", "Bolton", "Tully", "Stark"]
 };
 
 let winCount = 0
@@ -75,7 +76,7 @@ const generateWord = (optionValue) => {
     chosenWord = optionArray[Math.floor(Math.random() * optionArray.length)];
     chosenWord = chosenWord.toUpperCase()
 
-    let displayItem = chosenWord.replace(/./g, '<span class="dashes">_</span>');
+    let displayItem = chosenWord.replace(/./g, '<span class="dashes">_</span>',);
 
     answerSection.innerHTML = displayItem;
 
@@ -83,6 +84,7 @@ const generateWord = (optionValue) => {
 
 // Initialization
 const init =()=> {
+    
     winCount = 0;
     count = 0;
 
@@ -93,8 +95,8 @@ const init =()=> {
     keyboard.classList.add("hide");
     playAgain.classList.add("hide");
 
-    // For creating letter buttons, ASCII stands for American Standard Code for Information Interchange,
-    for (let i = 65; i < 91; i++) {
+    // For creating letter buttons, ASCII stands for American Standard Code for Information Interchange, table converter
+    for (let i = 65; i < 91 ; i++) {
         let button = document.createElement('button')
 
         button.classList.add('letters')
@@ -108,13 +110,14 @@ const init =()=> {
             //if array contains clicked value replace the matched dash with letter else draw on canvas
             if (charArray.includes(button.innerText)) {
                 charArray.forEach((char, index) => {
+                    
                     if (char === button.innerText) {
                         
                         dashes[index].innerText = char;
 
                         winCount += 1;
 
-                        if (winCount == charArray.length) {
+                        if (winCount === charArray.length) {
                             
                             result.innerHTML = `<h2 class='win-msg'>You've Won, Welcome To House Clark</h2><p>The word was <span>${chosenWord}</span></p>`;
                             
@@ -129,8 +132,8 @@ const init =()=> {
 
                 man(count);
 
-                //Count==6 because head,body,left arm, right arm,left leg,right leg
-                if (count == 6) {
+                //Count equal to 9 for each body part
+                if (count == 9) {
                     
                     result.innerHTML = `<h2 class='lose-msg'>You Loss, Now You Die!</h2><p>The word was <span>${chosenWord}</span></p>`;
                     
@@ -158,47 +161,63 @@ const init =()=> {
 };
 
 // Canvas
-const canvasCreator = () => {
+const canvasCreator =()=> {
     
-    let context = canvas.getContext("2d");
-    context.beginPath();
-    context.strokeStyle = "#000";
-    context.lineWidth = 2;
+    let ctx = canvas.getContext("2d");
+    ctx.beginPath();
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2.3;
     
     //For drawing lines
     const drawLine = (fromX, fromY, toX, toY) => {
-        context.moveTo(fromX, fromY);
-        context.lineTo(toX, toY);
-        context.stroke();
+        ctx.moveTo(fromX, fromY);
+        ctx.lineTo(toX, toY);
+        ctx.stroke();
     };
     
-    const head = () => {
-        context.beginPath();
-        context.arc(70, 30, 10, 0, Math.PI * 2, true);
-        context.stroke();
+    const head =()=> {
+        
+        ctx.beginPath();
+        ctx.arc(70, 30, 10, 0, Math.PI * 2, true);
+        ctx.stroke();
     };
     
-    const body = () => {
+    const rightEye =()=> {
+
+        drawLine(75, 28, 73, 28);
+    };
+
+    const leftEye =()=> {
+
+        drawLine(65, 28, 67, 28);
+    };
+
+    const mouth =()=> {
+
+        drawLine(75, 33, 65, 33);
+    };
+
+    const body =()=> {
         
         drawLine(70, 40, 70, 80);
     };
     
-    const leftArm = () => {
+    const leftArm =()=> {
         
         drawLine(70, 50, 50, 70);
     };
     
-    const rightArm = () => {
+    const rightArm =()=> {
     
         drawLine(70, 50, 90, 70);
     };
     
-    const leftLeg = () => {
+    const leftLeg =()=> {
     
         drawLine(70, 80, 50, 110);
     };
     
-    const rightLeg = () => {
+    const rightLeg =()=> {
     
         drawLine(70, 80, 90, 110);
     };
@@ -207,7 +226,7 @@ const canvasCreator = () => {
     const initialDrawing =()=> {
         
         //clear canvas
-        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
         //bottom line
         drawLine(10, 130, 130, 130);
@@ -223,32 +242,41 @@ const canvasCreator = () => {
 
     };
     
-    return { initialDrawing, head, body, leftArm, rightArm, leftLeg, rightLeg };
+    return { initialDrawing, head, rightEye, leftEye, mouth, body, leftArm, rightArm, leftLeg, rightLeg };
 
 };
 
 //draw the man
 const man =(count)=> {
     
-    let { head, body, leftArm, rightArm, leftLeg, rightLeg } = canvasCreator();
+    let { head, rightEye, leftEye, mouth, body, leftArm, rightArm, leftLeg, rightLeg } = canvasCreator();
     
     switch (count) {
     case 1:
         head();
         break;
     case 2:
-        body();
+        rightEye();
         break;
     case 3:
-        leftArm();
+        leftEye();
         break;
     case 4:
-        rightArm();
+        mouth();
         break;
     case 5:
-        leftLeg();
+        body();
         break;
     case 6:
+        rightArm();
+        break;
+    case 7:
+        leftArm();
+        break;
+    case 8:
+        leftLeg();
+        break;
+    case 9:
         rightLeg();
         break;
     default:
@@ -260,3 +288,6 @@ const man =(count)=> {
 //New Game
 playBtn.addEventListener("click", init);
 window.onload = init;
+
+
+

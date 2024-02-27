@@ -33,7 +33,7 @@ text-align: center;
 width: 100%;
 display: flex;
 justify-content: space-between;
-margin: 20px;
+margin: 20px 10px 20px 0;
 }
 
 #options-container button {
