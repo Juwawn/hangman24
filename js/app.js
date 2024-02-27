@@ -1,3 +1,29 @@
+/**
+ * Start Game: 
+ * 
+ * Game Options: 
+ * difficulty level 
+ * show:
+ * characters
+ * quotes
+ * events
+ * items
+ * 
+ * Canvas:
+ * Letters
+ * Attempts
+ * Hints
+ * Keyboard
+ * 
+ * 
+ * Restart Game
+ *  
+ * 
+ * Source I Used For Reference https://youtu.be/dRzhwwXy-Sk
+ */
+
+
+
 // Elements by Ids
 const optionsContainer = document.getElementById("options-container");
 const keyboard = document.getElementById("keyboard");
@@ -42,11 +68,11 @@ const blocker =()=> {
     let letterButtons = document.querySelectorAll('.letters')
 
     optionsButtons.forEach(button => {
-        buttons.disabled = true;
+        buttons.disabled = true
     })
 
     letterButtons.forEach(button => {
-        button.disabled.true
+        button.disabled = true
     })
     
     playAgain.classList.remove('hide')
@@ -62,102 +88,25 @@ const generateWord = (optionValue) => {
     
     let optionsButtons = document.querySelectorAll('.options')
 
+    //If optionValue matches the button innerText then highlight the button
     optionsButtons.forEach(button => {
         if (button.innerText.toLowerCase() === optionValue) {
             button.classList.add('active')
         }
-
+        
         button.disabled = true
     });
-
+    
     let optionArray = options[optionValue]
-
+    
     // chooses word at random
     chosenWord = optionArray[Math.floor(Math.random() * optionArray.length)];
     chosenWord = chosenWord.toUpperCase()
-
-    let displayItem = chosenWord.replace(/./g, '<span class="dashes">_</span>',);
-
-    answerSection.innerHTML = displayItem;
-
-};
-
-// Initialization
-const init =()=> {
     
-    winCount = 0;
-    count = 0;
-
-    // erase all content, hide letters and new game button
-    answerSection.innerHTML = "";
-    optionsContainer.innerHTML = "";
-    keyboard.innerHTML = "";
-    keyboard.classList.add("hide");
-    playAgain.classList.add("hide");
-
-    // For creating letter buttons, ASCII stands for American Standard Code for Information Interchange, table converter
-    for (let i = 65; i < 91 ; i++) {
-        let button = document.createElement('button')
-
-        button.classList.add('letters')
-        button.innerText = String.fromCharCode(i);
-
-        button.addEventListener('click', ()=> {
-            let charArray = chosenWord.split("")
-            
-            let dashes = document.getElementsByClassName("dashes")
-
-            //if array contains clicked value replace the matched dash with letter else draw on canvas
-            if (charArray.includes(button.innerText)) {
-                charArray.forEach((char, index) => {
-                    
-                    if (char === button.innerText) {
-                        
-                        dashes[index].innerText = char;
-
-                        winCount += 1;
-
-                        if (winCount === charArray.length) {
-                            
-                            result.innerHTML = `<h2 class='win-msg'>You've Won, Welcome To House Clark</h2><p>The word was <span>${chosenWord}</span></p>`;
-                            
-                            result.classList.add('text-center')
-                            
-                            blocker();
-                        }
-                    }
-                });
-            } else {
-                count += 1;
-
-                man(count);
-
-                //Count equal to 9 for each body part
-                if (count == 9) {
-                    
-                    result.innerHTML = `<h2 class='lose-msg'>You Loss, Now You Die!</h2><p>The word was <span>${chosenWord}</span></p>`;
-                    
-                    result.classList.add('text-center')
-                    
-                    blocker();
-                }
-
-            }
-
-            button.disabled = true;
-
-        });
-
-        keyboard.append(button);
-    }
-
-    displayOptions();
-
-    //Call to canvasCreator (for clearing previous canvas and creating initial canvas)
-    let { initialDrawing } = canvasCreator();
-
-    initialDrawing();
-
+    let displayItem = chosenWord.replace(/./g, '<span class="dashes">_</span>',);
+    
+    answerSection.innerHTML = displayItem;
+    
 };
 
 // Canvas
@@ -283,6 +232,87 @@ const man =(count)=> {
         break;
     }
 };
+
+// Initialization
+const init =()=> {
+    
+    winCount = 0;
+    count = 0;
+    
+    // erase all content, hide letters and new game button
+    answerSection.innerHTML = "";
+    optionsContainer.innerHTML = "";
+    keyboard.innerHTML = "";
+    keyboard.classList.add("hide");
+    playAgain.classList.add("hide");
+
+    // For creating letter buttons, ASCII stands for American Standard Code for Information Interchange, table converter
+    for (let i = 65; i < 91 ; i++) {
+        let button = document.createElement('button')
+
+        button.classList.add('letters')
+        button.innerText = String.fromCharCode(i); //static method returns a string created from the specified sequence of UTF-16 code units.
+        
+        // if button is clicked
+        button.addEventListener('click', ()=> {
+            let charArray = chosenWord.split("")
+            
+            let dashes = document.getElementsByClassName("dashes")
+
+            //if array contains clicked value replace the matched dash with letter else draw on canvas
+            if (charArray.includes(button.innerText)) {
+                charArray.forEach((char, index) => {
+                    
+                    if (char === button.innerText) {
+                        
+                        dashes[index].innerText = char;
+
+                        winCount += 1;
+                        // for win
+                        if (winCount === charArray.length) {
+                            
+                            result.innerHTML = `<h2 class='win-msg'>You've Won, Welcome To House Clark</h2><p>The word was <span>${chosenWord}</span></p>`;
+                            
+                            result.classList.add('text-center')
+                            
+                            blocker();
+                        }
+                    }
+                });
+            } else {
+                // for loss
+                count += 1;
+
+                man(count);
+
+                //Count equal to 9 for each body part
+                if (count == 9) {
+                    
+                    result.innerHTML = `<h2 class='lose-msg'>You Loss, Now You Die!</h2><p>The word was <span>${chosenWord}</span></p>`;
+                    
+                    result.classList.add('text-center')
+                    
+                    blocker();
+                }
+
+            }
+
+            button.disabled = true;
+
+        });
+
+        keyboard.append(button);
+    }
+
+    displayOptions();
+
+    //Call to canvasCreator (for clearing previous canvas and creating initial canvas)
+    let { initialDrawing } = canvasCreator();
+
+    initialDrawing();
+
+};
+
 
 
 //New Game
